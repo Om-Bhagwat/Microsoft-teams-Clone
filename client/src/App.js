@@ -1,11 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable default-case */
+
 //* Import React, and react hooks as we are going to use it here.
 //* React router provided by react-router-dom also needs to be installed.
 //! npm install react-router-dom
 
-import React, { useState , useEffect } from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import React,{useState,useEffect} from 'react';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 //* Now we need fire variable from Firebase folder to start with our functions for Login/Register.
 //! note: In react we need not give .js extension while importing in the new version.
@@ -13,6 +12,8 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import fire from './Firebase/fire';
 import Login from './Components/Login/Login';
 import Homepage from './Components/Homepage/Homepage';
+import Room from './Components/Room/Room';
+
 
 function App() {
 
@@ -22,11 +23,12 @@ function App() {
   const [ password , setPassword ] = useState('');
   const [ emailError , setEmailError ] = useState('');
   const [ passwordError , setPasswordError ] = useState('');
-  const [ user , setUser ] = useState('');
+  const [ user , setUser ] = useState(null);
   const [ hasAccount , setHasAccount ] = useState(false);
 
 
   //*Function to clear the inputs before filling the form again.
+
 
   const clearInputs = () => {
     setEmail('');
@@ -49,11 +51,11 @@ function App() {
     //* Previous error must be cleaned.
     clearErrors();
 
-
     //*All possible scenarious are checked with switch cases.
     fire.auth()
     .signInWithEmailAndPassword( email , password )
     .catch((error)=>{
+      // eslint-disable-next-line default-case
       switch(error.code){
         case "auth/invalid-email":
         case "auth/user-disabled":
@@ -78,6 +80,7 @@ function App() {
     fire.auth()
     .createUserWithEmailAndPassword(email,password)
     .catch((error)=>{
+      // eslint-disable-next-line default-case
       switch(error.code){
         case "auth/email-already-in-use":
         case "auth/invalid-email":
@@ -99,6 +102,7 @@ function App() {
 
   const authListener=()=>{
     fire.auth().onAuthStateChanged(user=>{
+      // console.log(user);
         if(user){
           clearInputs();
           setUser(user);
@@ -110,17 +114,24 @@ function App() {
 
   useEffect(()=>{
     authListener();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (
     <div>
         {user?(
-          <Router>
-              <Route path = '/' render = {(props)=>(
+          <BrowserRouter>
+          <Switch>
+              <Route path = '/' exact render = {(props)=>(
                   <Homepage {...props}  email={user.email}  handleLogout = {handleLogout}/>
                 )}
               />
-          </Router>
+              <Route path = '/room/:roomID' render = {(props)=>(
+                  <Room {...props}  email={user.email}  handleLogout = {handleLogout}/>
+                )}
+              />
+              </Switch>
+          </BrowserRouter>
         ):(
         <Login  email = {email} password = {password} setEmail = {setEmail} setPassword = {setPassword}
             handlelogin = {handlelogin}  handleSignup = {handleSignup} hasAccount={hasAccount} setHasAccount = {setHasAccount}
