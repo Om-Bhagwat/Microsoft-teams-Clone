@@ -22,13 +22,14 @@ const Video = (props) => {
 
     useEffect(() => {
         props.peer.on("stream", stream => {
+            // console.log();
             ref.current.srcObject = stream;
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <StyledVideo playsInline autoPlay ref={ref} />
+            <StyledVideo playsInline autoPlay ref={ref} />
     );
 }
 
@@ -39,7 +40,18 @@ const videoConstraints = {
 };
 
 const Room = (props) => {
+
+
+    const{email} = props;
+
+    console.log(email);
+
+
     const [peers, setPeers] = useState([]);
+    const [audiomute,setAudioMute] = useState(true);
+    const [videomute,setVideoMute]= useState(true);
+    const [myID,setMyID] = useState('');
+
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
@@ -47,7 +59,7 @@ const Room = (props) => {
 
     useEffect(() => {
         socketRef.current = io.connect("/");
-        navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
+        navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: false }).then(stream => {
             userVideo.current.srcObject = stream;
             socketRef.current.emit("join room", roomID);
             socketRef.current.on("all users", users => {
@@ -58,7 +70,10 @@ const Room = (props) => {
                         peerID: userID,
                         peer,
                     })
-                    peers.push(peer);
+                    peers.push({
+                        peerID:userID,
+                        peer,
+                    });
                 })
                 setPeers(peers);
             })
@@ -70,16 +85,37 @@ const Room = (props) => {
                     peer,
                 })
 
-                setPeers(users => [...users, peer]);
+
+                const peerObj = {
+                    peer,
+                    peerID:payload.callerID
+                }
+
+                setPeers(users => [...users, peerObj]);
             });
 
             socketRef.current.on("receiving returned signal", payload => {
                 const item = peersRef.current.find(p => p.peerID === payload.id);
                 item.peer.signal(payload.signal);
+
             });
+
+            socketRef.current.on("user left",id=>{
+                const peerObj = peersRef.current.find(p=>p.peerID===id);
+                if(peerObj){
+                    peerObj.peer.destroy();
+                }
+                const peers = peersRef.current.filter(p=>p.peerID!==id);
+                peersRef.current=peers;
+                setPeers(peers); 
+
+            })
+        
+
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     function createPeer(userToSignal, callerID, stream) {
         const peer = new Peer({
@@ -87,11 +123,12 @@ const Room = (props) => {
             trickle: false,
             stream,
         });
-
+        setMyID(userToSignal);
         peer.on("signal", signal => {
             socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
         })
-
+        // console.log(peer);
+        console.log(peersRef.current);
         return peer;
     }
 
@@ -107,20 +144,53 @@ const Room = (props) => {
         })
 
         peer.signal(incomingSignal);
-
-        console.log(peer);
+        console.log(peersRef.current);
         return peer;
     }
 
+    console.log(peers);
+    console.log(userVideo);
+
+    const leavecall = ()=>{
+
+        
+        window.location = "http://localhost:3000/";
+    }
+
+    const muteAudio=(e)=>{
+        e.preventDefault();
+        console.log("Called")
+        if(audiomute){
+            navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true });
+        }
+        else{
+            navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: false })
+        }
+        setAudioMute(!audiomute);
+        
+    }
+
+    // const MuteVideo=(e)=>{
+    //     e.preventDefault();
+    //     setVideoMute(!videomute);
+    //     navigator.mediaDevices.getUserMedia({ video: variable, audio: false })
+    // }
+
+
     return (
-        <Container>
-            <StyledVideo muted ref={userVideo} autoPlay playsInline />
-            {peers.map((peer, index) => {
-                return (
-                    <Video key={index} peer={peer} />
-                );
-            })}
-        </Container>
+        <>
+            <Container>
+                <StyledVideo muted ref={userVideo} autoPlay playsInline />
+                {peers.map((peer) => {
+                    return (
+                        <>
+                            <Video key={peer.peerID} peer={peer.peer} />
+                        </>
+                    );
+                })}
+            </Container>
+            <button className="btn btn-danger" onClick={leavecall}>HangUp</button>
+        </>
     );
 };
 
