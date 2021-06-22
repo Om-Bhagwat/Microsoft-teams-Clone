@@ -42,10 +42,14 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
         const roomID = socketToRoom[socket.id];
         let room = users[roomID];
+        // console.log(users);
         if (room) {
             room = room.filter(id => id !== socket.id);
             users[roomID] = room;
         }
+        
+        socket.broadcast.emit('user left',socket.id);
+
     });
 
 });
