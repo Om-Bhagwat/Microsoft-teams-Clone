@@ -50,7 +50,6 @@ const Room = (props) => {
     const [peers, setPeers] = useState([]);
     const [audiomute,setAudioMute] = useState(true);
     const [videomute,setVideoMute]= useState(true);
-    const [myID,setMyID] = useState('');
 
     const socketRef = useRef();
     const userVideo = useRef();
@@ -58,9 +57,11 @@ const Room = (props) => {
     const roomID = props.match.params.roomID;
 
     useEffect(() => {
-        socketRef.current = io.connect("/");
-        navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: false }).then(stream => {
+        socketRef.current = io.connect("http://localhost:8000/");
+        navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
+            // console.log(localstream.getAudioTracks()[0]);
             userVideo.current.srcObject = stream;
+            // console.log(stream.getAudioTracks()[0]);
             socketRef.current.emit("join room", roomID);
             socketRef.current.on("all users", users => {
                 const peers = [];
@@ -73,6 +74,7 @@ const Room = (props) => {
                     peers.push({
                         peerID:userID,
                         peer,
+                        Name:email
                     });
                 })
                 setPeers(peers);
@@ -88,7 +90,8 @@ const Room = (props) => {
 
                 const peerObj = {
                     peer,
-                    peerID:payload.callerID
+                    peerID:payload.callerID,
+                    Name: email
                 }
 
                 setPeers(users => [...users, peerObj]);
@@ -123,7 +126,6 @@ const Room = (props) => {
             trickle: false,
             stream,
         });
-        setMyID(userToSignal);
         peer.on("signal", signal => {
             socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
         })
@@ -159,22 +161,15 @@ const Room = (props) => {
 
     const muteAudio=(e)=>{
         e.preventDefault();
-        console.log("Called")
-        if(audiomute){
-            navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true });
-        }
-        else{
-            navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: false })
-        }
         setAudioMute(!audiomute);
-        
+        userVideo.current.srcObject.getAudioTracks()[0].enabled = !(userVideo.current.srcObject.getAudioTracks()[0].enabled);
     }
 
-    // const MuteVideo=(e)=>{
-    //     e.preventDefault();
-    //     setVideoMute(!videomute);
-    //     navigator.mediaDevices.getUserMedia({ video: variable, audio: false })
-    // }
+    const MuteVideo=(e)=>{
+        e.preventDefault();
+        setVideoMute(!videomute);
+        userVideo.current.srcObject.getVideoTracks()[0].enabled = !(userVideo.current.srcObject.getVideoTracks()[0].enabled);
+    }
 
 
     return (
@@ -185,11 +180,31 @@ const Room = (props) => {
                     return (
                         <>
                             <Video key={peer.peerID} peer={peer.peer} />
+                            <h2>{peer.Name}</h2>
                         </>
                     );
                 })}
             </Container>
             <button className="btn btn-danger" onClick={leavecall}>HangUp</button>
+            {audiomute?(
+                <>
+                    <button className="btn btn-primary" onClick={muteAudio}>Mute</button>
+                </>
+            ):(
+                <>
+                    <button className="btn btn-primary" onClick={muteAudio}>UnMute</button>
+                </>
+            )}
+            <br></br>
+            {videomute?(
+                <>
+                    <button className="btn btn-primary" onClick={MuteVideo}>Hide Video</button>
+                </>
+            ):(
+                <>
+                    <button className="btn btn-primary" onClick={MuteVideo}>Enable Video</button>
+                </>
+            )}
         </>
     );
 };

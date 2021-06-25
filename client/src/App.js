@@ -127,7 +127,7 @@ function App() {
                 )}
               />
               <Route path = '/room/:roomID' render = {(props)=>(
-                  <Room {...props} email={email} />
+                  <Room {...props} email={user.email} />
                 )}
               />
               </Switch>
