@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
+// import socket from "socket.io-client/lib/socket";
+
+
+import Chat from '../Chat/Chat';
 
 const Container = styled.div`
     padding: 20px;
@@ -56,17 +60,20 @@ const Room = (props) => {
     const peersRef = useRef([]);
     const roomID = props.match.params.roomID;
 
+
     useEffect(() => {
         socketRef.current = io.connect("http://localhost:8000/");
+        console.log(socketRef.current);
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
             // console.log(localstream.getAudioTracks()[0]);
             userVideo.current.srcObject = stream;
             // console.log(stream.getAudioTracks()[0]);
-            socketRef.current.emit("join room", roomID);
-            socketRef.current.on("all users", users => {
+            socketRef.current.emit("join room",roomID);
+            socketRef.current.on("all users", (users) => {
                 const peers = [];
                 users.forEach(userID => {
-                    const peer = createPeer(userID, socketRef.current.id, stream);
+                    const peer = createPeer(userID, socketRef.current.id,stream);
+                    
                     peersRef.current.push({
                         peerID: userID,
                         peer,
@@ -74,24 +81,25 @@ const Room = (props) => {
                     peers.push({
                         peerID:userID,
                         peer,
-                        Name:email
                     });
                 })
                 setPeers(peers);
             })
 
+            console.log(socketRef);
             socketRef.current.on("user joined", payload => {
                 const peer = addPeer(payload.signal, payload.callerID, stream);
                 peersRef.current.push({
                     peerID: payload.callerID,
                     peer,
+                    Name:payload.Name,
                 })
 
-
+                // console.log(payload);
                 const peerObj = {
                     peer,
                     peerID:payload.callerID,
-                    Name: email
+                    Name:payload.Name,
                 }
 
                 setPeers(users => [...users, peerObj]);
@@ -111,7 +119,7 @@ const Room = (props) => {
                 const peers = peersRef.current.filter(p=>p.peerID!==id);
                 peersRef.current=peers;
                 setPeers(peers); 
-
+ 
             })
         
 
@@ -120,20 +128,23 @@ const Room = (props) => {
     }, []);
 
 
-    function createPeer(userToSignal, callerID, stream) {
+    
+
+    function createPeer(userToSignal, callerID ,stream) {
         const peer = new Peer({
             initiator: true,
             trickle: false,
             stream,
         });
         peer.on("signal", signal => {
-            socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
+            socketRef.current.emit("sending signal", { userToSignal, callerID, signal,email })
         })
-        // console.log(peer);
-        console.log(peersRef.current);
+
         return peer;
+
     }
 
+    console.log(peers);
     function addPeer(incomingSignal, callerID, stream) {
         const peer = new Peer({
             initiator: false,
@@ -141,8 +152,8 @@ const Room = (props) => {
             stream,
         })
 
-        peer.on("signal", signal => {
-            socketRef.current.emit("returning signal", { signal, callerID })
+        peer.on("signal", signal => {   
+            socketRef.current.emit("returning signal", { signal, callerID,email })
         })
 
         peer.signal(incomingSignal);
@@ -150,8 +161,7 @@ const Room = (props) => {
         return peer;
     }
 
-    console.log(peers);
-    console.log(userVideo);
+
 
     const leavecall = ()=>{
 
@@ -176,11 +186,13 @@ const Room = (props) => {
         <>
             <Container>
                 <StyledVideo muted ref={userVideo} autoPlay playsInline />
+                <h4>ME</h4>
+                {console.log(peers)}
                 {peers.map((peer) => {
                     return (
                         <>
                             <Video key={peer.peerID} peer={peer.peer} />
-                            <h2>{peer.Name}</h2>
+                            <h4>{peer.Name}</h4>
                         </>
                     );
                 })}
@@ -205,6 +217,7 @@ const Room = (props) => {
                     <button className="btn btn-primary" onClick={MuteVideo}>Enable Video</button>
                 </>
             )}
+            <Chat roomID={roomID} email={email} />
         </>
     );
 };
