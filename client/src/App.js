@@ -5,6 +5,7 @@
 
 import React,{useState,useEffect} from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import axios from 'axios';
 
 //* Now we need fire variable from Firebase folder to start with our functions for Login/Register.
 //! note: In react we need not give .js extension while importing in the new version.
@@ -13,6 +14,7 @@ import fire from './Firebase/fire';
 import Login from './Components/Login/Login';
 import Homepage from './Components/Homepage/Homepage';
 import Room from './Components/Room/Room';
+import CreateTeam from './Components/CreateTeam/CreateTeam';
 
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
 
   const [ email , setEmail ] = useState('');
   const [ password , setPassword ] = useState('');
+  const [name,setName] = useState('');
   const [ emailError , setEmailError ] = useState('');
   const [ passwordError , setPasswordError ] = useState('');
   const [ user , setUser ] = useState(null);
@@ -74,6 +77,15 @@ function App() {
   //* Function to register new user.
 
   const handleSignup = async () => {
+
+    // try{
+    //   const response = await axios.post('',{
+
+    //   },);
+    //   console.log(response);
+    // }catch(error){
+    //   console.log(error);
+    // }
     
     clearErrors();
 
@@ -130,12 +142,16 @@ function App() {
                   <Room {...props} email={user.email} />
                 )}
               />
+              <Route path = '/createteam' render={(props)=>(
+                  <CreateTeam {...props} email={user.email} />
+              )}
+              />
               </Switch>
           </BrowserRouter>
         ):(
         <Login  email = {email} password = {password} setEmail = {setEmail} setPassword = {setPassword}
             handlelogin = {handlelogin}  handleSignup = {handleSignup} hasAccount={hasAccount} setHasAccount = {setHasAccount}
-            emailError = {emailError} passwordError = {passwordError}
+            emailError = {emailError} passwordError = {passwordError} name={name} setName={setName} 
           />
         )}
     </div>

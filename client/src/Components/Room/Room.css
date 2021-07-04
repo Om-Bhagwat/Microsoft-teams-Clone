@@ -87,6 +87,10 @@ html {
 	
 }
 
+.toggle-chat-not{
+	color:white;
+}
+
 .chat-section-not{
 	background-color: #f3f2f1;
 	/* border:1px blue solid; */

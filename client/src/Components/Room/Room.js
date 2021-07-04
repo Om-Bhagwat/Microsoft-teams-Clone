@@ -55,6 +55,7 @@ const Room = (props) => {
     const [peers, setPeers] = useState([]);
     const [audiomute,setAudioMute] = useState(true);
     const [videomute,setVideoMute]= useState(true);
+    const [toggleChat,setToggleChat] = useState(true);
 
     const socketRef = useRef();
     const userVideo = useRef();
@@ -64,7 +65,7 @@ const Room = (props) => {
     useEffect(() => {
         socketRef.current = io.connect("http://localhost:8000/");
         console.log(socketRef.current);
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+        navigator.mediaDevices.getUserMedia({ video: true, audio:true }).then(stream => {
             // console.log(localstream.getAudioTracks()[0]);
             userVideo.current.srcObject = stream;
             // console.log(stream.getAudioTracks()[0]);
@@ -184,13 +185,19 @@ const Room = (props) => {
         setVideoMute(!videomute);
         userVideo.current.srcObject.getVideoTracks()[0].enabled = !(userVideo.current.srcObject.getVideoTracks()[0].enabled);
     }
+
+    const openChat=(e)=>{
+        e.preventDefault();
+
+        setToggleChat(!toggleChat);
+    }
     
 
     console.log(peers);
     return (
         <div className="grid-container">
 
-            <div className="video-screen">
+            <div className={`${toggleChat?"video-screen":"video-screen-not"}`}>
                 <div className="videoBox">
                     <StyledVideo  ref={userVideo} autoPlay playsInline />
                     <div className="pName">
@@ -228,14 +235,14 @@ const Room = (props) => {
                         <button className="control-btns hangup" onClick={leavecall}>
                             <i className="material-icons">call_end</i>
                         </button>
-                        <button className="control-btns toggle-chat" >
+                        <button onClick={openChat} className={`control-btns ${toggleChat?"toggle-chat":"toggle-chat-not"}`} >
                             <i className="material-icons">chat</i>
                         </button>
                     </div>
                 </div>
 
             </div>
-            <Chat roomID={roomID} email={email} />
+            <Chat roomID={roomID} email={email} toggleChat={toggleChat} setToggleChat={setToggleChat} openChat={openChat} />
             {/* <ReactMediaRecorder
                 video
                 render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (

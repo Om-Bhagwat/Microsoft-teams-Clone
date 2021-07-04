@@ -15,7 +15,9 @@ const Login = (props) => {
         hasAccount,
         setHasAccount,
         emailError,
-        passwordError
+        passwordError,
+        name,
+        setName
     } = props;
 
 
@@ -83,7 +85,10 @@ const Login = (props) => {
                                         <div className="form-group">
                                             <label className="text-secondary">Name</label>
                                             <input className="form-control"
-                                                type="text" required 
+                                                type="text"
+                                                required
+                                                value={name}
+                                                onChange={(e)=>setName(e.target.value)} 
                                             />
                                         </div>
                                         <div className="form-group">
