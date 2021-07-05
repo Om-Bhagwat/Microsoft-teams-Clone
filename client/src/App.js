@@ -15,6 +15,7 @@ import Login from './Components/Login/Login';
 import Homepage from './Components/Homepage/Homepage';
 import Room from './Components/Room/Room';
 import CreateTeam from './Components/CreateTeam/CreateTeam';
+import TeamChannel from './Components/TeamChannel/TeamChannel';
 
 
 function App() {
@@ -78,14 +79,15 @@ function App() {
 
   const handleSignup = async () => {
 
-    // try{
-    //   const response = await axios.post('',{
-
-    //   },);
-    //   console.log(response);
-    // }catch(error){
-    //   console.log(error);
-    // }
+    try{
+      const response = await axios.post('http://localhost:8000/posts/adduser',{
+          username:name,
+          email
+      },);
+      console.log(response);
+    }catch(error){
+      console.log(error);
+    }
     
     clearErrors();
 
@@ -144,6 +146,10 @@ function App() {
               />
               <Route path = '/createteam' render={(props)=>(
                   <CreateTeam {...props} email={user.email} />
+              )}
+              />
+              <Route path = '/team/:teamname' render={(props)=>(
+                  <TeamChannel {...props} email={user.email} />
               )}
               />
               </Switch>

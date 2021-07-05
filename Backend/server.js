@@ -1,14 +1,23 @@
-require('dotenv').config();
-const express = require("express");
-const http = require("http");
+//require('dotenv').config();
+import mongoose from 'mongoose';
+import postRoutes from './routes/posts.js';
+import bodyParser from 'body-parser';
+import express from 'express';
+import http from 'http';
 const app = express();
 const server = http.createServer(app);
-const socket = require("socket.io");
-const cors = require("cors");
+import socket from 'socket.io';
+import cors from 'cors';
 const io = socket(server);
 
 
+
+app.use(bodyParser.json({limit:"30mb",extended:true}))
+app.use(bodyParser.urlencoded({limit:"30mb",extended:true}))
 app.use(cors());
+
+app.use('/posts',postRoutes);
+
 const users = {};
 
 const socketToRoom = {};
@@ -28,9 +37,9 @@ io.on('connection', socket => {
             users[roomID] = [socket.id];
         }
         socketToRoom[socket.id] = roomID;
-        console.log("usersinroom    "+users[roomID]);
+        //console.log("usersinroom    "+users[roomID]);
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
-        socket.emit("all users", usersInThisRoom);
+        //socket.emit("all users", usersInThisRoom);
     });
     
 
@@ -39,7 +48,7 @@ io.on('connection', socket => {
     })
 
     socket.on("send_message",(data)=>{
-        console.log(data);
+        //console.log(data);
         socket.to(data.room).emit("recieve_message",data.content);
     })
 
@@ -55,19 +64,29 @@ io.on('connection', socket => {
         const roomID = socketToRoom[socket.id];
         let room = users[roomID];
         // console.log(users);
-        console.log("  "+users[roomID]);
+        //console.log("  "+users[roomID]);
         if (room) {
             room = room.filter(id => id !== socket.id);
             users[roomID] = room;
         }
         
-        console.log("room"+users[roomID]);
+        //console.log("room"+users[roomID]);
         socket.broadcast.emit('user left',socket.id);
 
     });
 
 });
 
-server.listen(process.env.PORT || 8000, () => console.log('server is running on port 8000'));
+//server.listen(process.env.PORT || 8000, () => console.log('server is running on port 8000'));
+
+const CONNECTION_URL = 'mongodb+srv://Om:WbiidEkQuX7zPc6a@teams.hchbg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const PORT =process.env.PORT || 8000;
+// extra parameters so that we don't get warnings
+mongoose.connect(CONNECTION_URL,{useNewUrlParser:true,useUnifiedTopology:true})
+    .then(() => server.listen(PORT,() => console.log(`Server running on port : ${PORT} and Database is connected`)))
+    .catch((error) => console.log(error.message));
+
+    //So we dont get warnings in console
+mongoose.set('useFindAndModify',false);
 
 

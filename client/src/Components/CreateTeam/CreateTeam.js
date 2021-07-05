@@ -12,11 +12,11 @@ const CreateTeam=(props)=>{
         //logic to do on submitting the email and teamname.
 
         try{
-            // const response = await axios.post('',{
-            //     email,
-            //     teamname,
-            // },);
-            // console.log(response);
+            const response = await axios.post('http://localhost:8000/posts/addteam',{
+                email,
+                teamname,
+            },);
+            console.log(response);
         }catch(error){
             console.log(error);
         }finally{
