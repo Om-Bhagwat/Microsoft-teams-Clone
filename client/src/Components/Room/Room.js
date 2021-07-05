@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
+import axios from 'axios';
 import {ReactMediaRecorder} from "react-media-recorder";
 
 
@@ -56,11 +57,14 @@ const Room = (props) => {
     const [audiomute,setAudioMute] = useState(true);
     const [videomute,setVideoMute]= useState(true);
     const [toggleChat,setToggleChat] = useState(true);
+    const [userName,setUsername] = useState('');
 
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
     const roomID = props.match.params.roomID;
+
+
 
     useEffect(() => {
         socketRef.current = io.connect("http://localhost:8000/");
@@ -92,6 +96,7 @@ const Room = (props) => {
 
             console.log(peersRef);
             socketRef.current.on("user joined", payload => {
+                //console.log(payload);
                 const peer = addPeer(payload.signal, payload.callerID, stream);
                 peersRef.current.push({
                     peerID: payload.callerID,
@@ -129,8 +134,23 @@ const Room = (props) => {
 
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    
+    }, []);   
+
+
+    useEffect(()=>{
+        async function hanGet(){
+            try{
+                const response = await axios.post('http://localhost:5000/posts/findteams',{
+                    email
+                },);
+                console.log(response.data.data1[0].username);
+                setUsername(response.data.data1[0].username);
+            }catch(error){
+                console.log(error);
+            }
+        }
+        hanGet();
+    },[]);
 
     function createPeer(userToSignal, callerID ,stream) {
         const peer = new Peer({
@@ -139,8 +159,9 @@ const Room = (props) => {
             stream,
         });
         peer.on("signal", signal => {
-            socketRef.current.emit("sending signal", { userToSignal, callerID, signal,email })
+            socketRef.current.emit("sending signal", { userToSignal, callerID, signal,email})
         })
+
 
 
         return peer;
@@ -156,7 +177,7 @@ const Room = (props) => {
         })
 
         peer.on("signal", signal => {   
-            socketRef.current.emit("returning signal", { signal, callerID,email })
+            socketRef.current.emit("returning signal", { signal, callerID })
         })
 
         peer.signal(incomingSignal);
@@ -242,7 +263,7 @@ const Room = (props) => {
                 </div>
 
             </div>
-            <Chat roomID={roomID} email={email} toggleChat={toggleChat} setToggleChat={setToggleChat} openChat={openChat} />
+            <Chat roomID={roomID} email={email} toggleChat={toggleChat} setToggleChat={setToggleChat} openChat={openChat} userName={userName} />
             {/* <ReactMediaRecorder
                 video
                 render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (

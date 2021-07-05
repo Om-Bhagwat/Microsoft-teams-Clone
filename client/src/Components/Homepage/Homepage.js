@@ -30,7 +30,7 @@ const Homepage = (props) =>{
 
         let allcoms;
         try{
-            const response = await axios.post('http://localhost:8000/posts/findteams',{
+            const response = await axios.post('http://localhost:5000/posts/findteams',{
                 email
             },);
 

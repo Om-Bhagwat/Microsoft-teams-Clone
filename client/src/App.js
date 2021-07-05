@@ -29,9 +29,10 @@ function App() {
   const [ passwordError , setPasswordError ] = useState('');
   const [ user , setUser ] = useState(null);
   const [ hasAccount , setHasAccount ] = useState(false);
-
+  
 
   //*Function to clear the inputs before filling the form again.
+
 
 
   const clearInputs = () => {
@@ -80,7 +81,7 @@ function App() {
   const handleSignup = async () => {
 
     try{
-      const response = await axios.post('http://localhost:8000/posts/adduser',{
+      const response = await axios.post('http://localhost:5000/posts/adduser',{
           username:name,
           email
       },);
@@ -140,15 +141,15 @@ function App() {
                   <Homepage {...props}  email={user.email}  handleLogout = {handleLogout}/>
                 )}
               />
-              <Route path = '/room/:roomID' render = {(props)=>(
+              <Route path = '/room/:roomID' exact render = {(props)=>(
                   <Room {...props} email={user.email} />
                 )}
               />
-              <Route path = '/createteam' render={(props)=>(
+              <Route path = '/createteam' exact render={(props)=>(
                   <CreateTeam {...props} email={user.email} />
               )}
               />
-              <Route path = '/team/:teamname' render={(props)=>(
+              <Route path = '/team/:teamname' exact render={(props)=>(
                   <TeamChannel {...props} email={user.email} />
               )}
               />

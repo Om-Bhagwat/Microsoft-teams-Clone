@@ -8,7 +8,7 @@ const CONNECTION_PORT = "localhost:8000/"
 
 const Chat=(props)=>{
 
-    const {roomID,email,toggleChat,setToggleChat,openChat} = props;
+    const {roomID,email,toggleChat,setToggleChat,openChat,userName} = props;
     const [connecto,setConnecto] = useState(true);
     console.log(roomID);
 
@@ -32,11 +32,14 @@ const Chat=(props)=>{
 
 
     const sendMessage = async () => {
+        var today = new Date();
+        //var time = today.getHours()+':'+today.getMinutes();
         let messageContent = {
           room: roomID,
           content: {
-            author: email,
+            author: userName,
             message: message,
+            time:today.getHours()+':'+today.getMinutes(),
           },
         };
     
@@ -58,10 +61,10 @@ const Chat=(props)=>{
                             <div className="chatArea">
                                 {messageList.map((val,key)=>{
                                     return(
-                                        <div className="chatheads" id={val.author === email?"YOU":"Other"}>
-                                            <h4>{val.author}</h4>
+                                        <div className={`${(val.author===userName)?"chatheads":"chathead"}`} id={val.author === email?"YOU":"Other"}>
+                                            <h6>{val.author}</h6>
                                             <p>{val.message}</p>
-                                            <p>2.12 PM</p>
+                                            <p>{val.time}</p>
                                         </div>    
                                     )
                                 })}

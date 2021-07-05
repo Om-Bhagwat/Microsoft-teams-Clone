@@ -133,13 +133,46 @@ html {
 	/* border:1px blue solid; */
 	padding: 5px;
 	margin: 5px;
+	margin-left:25px;
+	border-radius: 5px;
+	background-color: #9e9ea3;
+}
+
+.chathead {
+	padding: 5px;
+	margin: 5px;
+	margin-right:25px;
 	border-radius: 5px;
 	background-color: #e5e5f1;
 }
 
-.chatheads p:nth-child(3) {
-	text-align: right;
+.chathead h6{
 	font-size: 0.8rem;
+	margin:0px;
+	margin-bottom:2px;
+	color:rgb(64, 64, 173)
+}
+
+.chatheads h6{
+	font-size: 0.8rem;
+	margin:0px;
+	margin-bottom:2px;
+	color:rgb(64, 64, 173)
+}
+
+.chatheads p:nth-child(3) {
+	padding:0px;
+	margin:0px;
+	text-align: right;
+	font-size: 0.6rem;
+	color:slategray;
+}
+
+.chathead p:nth-child(3){
+	padding:0px;
+	margin:0px;
+	text-align: right;
+	font-size: 0.6rem;
 	color:slategray;
 }
 
