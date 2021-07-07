@@ -1,24 +1,9 @@
+
+//importing modules.
 import mongoose from 'mongoose';
 
-// const postSchema = mongoose.Schema(
-//     {
-//         title:String,
-//         creator:String,
-//         tags:[String],
-//         selectedFile:String,
-//         likeCount:{
-//             type:Number,
-//             default:0
-//         },
-//         createdAt:{
-//             type:Date,
-//             default: new Date()
-//         },
-//     }
-// );
 
-
-
+//Defining schema for storing username,email and teams the user is in.
 const teamSchema = mongoose.Schema(
     {
         

@@ -1,8 +1,11 @@
-import PostMessage from '../models/postMessage.js';
 
+//import models.
+import PostMessage from '../models/postMessage.js';
 import teamDetails from '../models/teams.js';
 
 
+
+//function to get Messages along with username and teamname.
 export const getPosts= async (req,res) =>{
 
 
@@ -20,7 +23,7 @@ export const getPosts= async (req,res) =>{
 
 
 
-
+//function to save Messages along with username and teamname.
 export const createPost = async (req,res)=>{
     
     const post = req.body;
@@ -36,13 +39,13 @@ export const createPost = async (req,res)=>{
     }
 }
 
-
+//function to find the messages with teamname.
 export const findMessage= async (req, res) => {
 
     try {
         const data1= await PostMessage.find({ teamname: req.body.teamname})
 
-        console.log("trying");
+        //console.log("trying");
         
 
         res.send({ data1})
@@ -52,6 +55,8 @@ export const findMessage= async (req, res) => {
 }
 
 
+
+//function to create a new team.
 export const addTeam= async (req, res) => {
 
     const post = req.body;
@@ -60,22 +65,14 @@ export const addTeam= async (req, res) => {
         const data1= await teamDetails.find({ email: post.email})
 
 
-        console.log("trying to add");
+        //console.log("trying to add");
         
-        console.log(post.email);
-        console.log(data1[0].teams);
+        //console.log(post.email);
+        //console.log(data1[0].teams);
 
-        // teamDetails.col.update(
-        //     { email: data1.email }, 
-        //     {$push: {'teams.teamname': post.teamname}}
-        // )
+        
         data1[0].teams.push({"teamname":post.teamname});
         await data1[0].save();
-
-        // myFirstDatabase.teamdetails.update(
-        //     { email: data1.email },
-        //     { $push: { teams: teamname:}}
-        //  )
         
 
         res.send(data1[0])
@@ -84,6 +81,8 @@ export const addTeam= async (req, res) => {
     }
 }
 
+
+//fucntion to add new user to the Application which saves the name.
 export const adduser = async (req,res)=>{
     
     const post = req.body;
@@ -100,6 +99,8 @@ export const adduser = async (req,res)=>{
 }
 
 
+
+//function to find the teams based on the user's email.
 export const findTeams= async (req, res) => {
 
     const post = req.body;
@@ -107,7 +108,7 @@ export const findTeams= async (req, res) => {
     try {
         const data1= await teamDetails.find({ email: post.email})
 
-        console.log("trying to find teams");
+        //console.log("trying to find teams");
 
         
         

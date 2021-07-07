@@ -1,10 +1,14 @@
+
+//importing Modules.
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+//importing Routes.
 import postRoutes from './routes/posts.js';
 
+//initialze a express app.
 const app = express();
 
 
@@ -16,8 +20,6 @@ app.use(cors());
 app.use('/posts',postRoutes);
 
 
-
-//WbiidEkQuX7zPc6a
 
 const CONNECTION_URL = 'mongodb+srv://Om:WbiidEkQuX7zPc6a@teams.hchbg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 const PORT =process.env.PORT || 5000;
