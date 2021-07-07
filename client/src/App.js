@@ -1,15 +1,12 @@
 
-//* Import React, and react hooks as we are going to use it here.
-//* React router provided by react-router-dom also needs to be installed.
-//! npm install react-router-dom
+//Module Imports
 
 import React,{useState,useEffect} from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import axios from 'axios';
 
-//* Now we need fire variable from Firebase folder to start with our functions for Login/Register.
-//! note: In react we need not give .js extension while importing in the new version.
 
+//Component Imports
 import fire from './Firebase/fire';
 import Login from './Components/Login/Login';
 import Homepage from './Components/Homepage/Homepage';
@@ -19,7 +16,7 @@ import TeamChannel from './Components/TeamChannel/TeamChannel';
 
 function App() {
 
-  //*Let's define usestate hooks for email,password and error one to handle errors incase of errors.
+  //useState hooks for The user Auththenication which is passed on to various components.
 
   const [ email , setEmail ] = useState('');
   const [ password , setPassword ] = useState('');
@@ -30,32 +27,28 @@ function App() {
   const [ hasAccount , setHasAccount ] = useState(false);
   
 
-  //*Function to clear the inputs before filling the form again.
+ 
 
-
+  //Firebase userAuthentication Login starts here.
 
   const clearInputs = () => {
     setEmail('');
     setPassword('');
   }
 
-  //*Function to clear errors shown on the form.
 
   const clearErrors = () => {
     setEmailError('');
     setPasswordError('');
   }
 
-  //* Login function to send the email and password to firebase and authenticate.
-  //! Aysnc function is used because we are dealing with firebase and we dont't want to wait the entire time.
 
   const handlelogin = async () => {
    
-    //* When a Person had an error and is trying to fill the form again,
-    //* Previous error must be cleaned.
     clearErrors();
 
     //*All possible scenarious are checked with switch cases.
+    
     fire.auth()
     .signInWithEmailAndPassword( email , password )
     .catch((error)=>{
@@ -78,6 +71,8 @@ function App() {
   //* Function to register new user.
 
   const handleSignup = async () => {
+
+    //Saving name against Email in the MongoDb.
 
     try{
       const response = await axios.post('http://localhost:5000/posts/adduser',{
@@ -108,15 +103,12 @@ function App() {
     });
   }
 
-  //*Function to logout a user from the account.
-
   const handleLogout = () =>{
     fire.auth().signOut();
   }
 
   const authListener=()=>{
     fire.auth().onAuthStateChanged(user=>{
-      // console.log(user);
         if(user){
           clearInputs();
           setUser(user);
@@ -130,6 +122,11 @@ function App() {
     authListener();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
+
+  //UserAuthentication Logic Ends here.
+
+  //Entire Project Routing is done from here using react-router-dom.
+  //In entire Project {val?(if true execute this bracket):(else execute this)} is used.
 
   return (
     <div>

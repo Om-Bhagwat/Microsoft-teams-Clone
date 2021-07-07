@@ -1,32 +1,40 @@
+
+//Module imports.
+
 import React,{useState,useEffect} from 'react'
 import { v1 as uuid } from "uuid";
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 
+//CSS imports.
+
 import './Homepage.css';
 
 const Homepage = (props) =>{
+
+    //arguments recieved from App.js as props.
 
     const{
         email,
         handleLogout
     } = props;
 
+    //useState Hooks defined.
+
     const [allteams,setAllteams] = useState([]);
     const [teamn,setTeamn] = useState('');
     const [newTeam,setNewTeam] = useState('');
     const [flag,setFlag] = useState(true);
 
-    console.log(email);
 
+    //Generating a unique ID each time this fires.
 
     function create() {
         const id = uuid();
         props.history.push(`/room/${id}`);
     }
-    // const createATeam=()=>{
-    //     props.history.push(`/createteam`)
-    // }
+
+    //At each load this useEffect hook will fetch you the list of teams you are in.
 
     useEffect(()=>{
         async function seeYourTeams(){
@@ -38,9 +46,6 @@ const Homepage = (props) =>{
     
                 allcoms = response.data.data1[0].teams;
                 setTeamn(response.data.data1[0].username);
-                // setAllteams(allcoms);
-                console.log(allcoms);
-                
                 setAllteams(allcoms);
     
             }catch(error){
@@ -51,6 +56,9 @@ const Homepage = (props) =>{
         seeYourTeams();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
+
+
+    //This will create a new team for you.
 
     const createNewTeam=async(e)=>{
         e.preventDefault();
@@ -66,24 +74,32 @@ const Homepage = (props) =>{
         }
     }
 
-    console.log(allteams);
+
     return(
         <div>
-            {/* <button type="button"  data-toggle="modal" data-target="#exampleModal">
-            Launch demo modal
-            </button> */}
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                
                 <div class="modal-dialog" role="document">
+                    
                     <div class="modal-content">
+                        
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Create A Team</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+
                         <div class="modal-body">
-                            <input value={newTeam} onChange={(e)=>setNewTeam(e.target.value)} type="text" required placeholder="Enter Name of the Team." />
+                            <input 
+                                value={newTeam} 
+                                onChange={(e)=>setNewTeam(e.target.value)} 
+                                type="text" 
+                                required 
+                                placeholder="Enter Name of the Team." />
                         </div>
+
                         <div class="modal-footer">
                             {(newTeam!=='' && flag)?(
                                 <>
@@ -97,9 +113,13 @@ const Homepage = (props) =>{
                                 </>
                             )}
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
             <header>
                 <h4>Teams</h4>
                 <h5>Welcome,&nbsp;{teamn}</h5>
@@ -107,15 +127,19 @@ const Homepage = (props) =>{
             </header>
 
             <div className="main-container">
+                
                 <div className="option-btns">
+                    
                     <button type="button" data-toggle="modal" data-target="#exampleModal" className="create-team">
                         <i className="material-icons">group_add</i>
                         <span>Create&nbsp;Team</span>
                     </button>
+                    
                     <button onClick={create} class="make-call">
                         <i class="material-icons">call</i>
                         <span>Call</span>
                     </button>
+                
                 </div>
 
                 <div className="team-list">
@@ -133,6 +157,7 @@ const Homepage = (props) =>{
                 </div>
 
             </div>
+
         </div>
     )
 }

@@ -1,15 +1,25 @@
+
+//module Imports
+
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import { v1 as uuid} from 'uuid';
 import io from "socket.io-client";
 
+
+//CSS imports.
 import './TeamChannel.css';
 
 let socket;
 const CONNECTION_PORT = "localhost:8000/"
+
+
 const TeamChannel=(props)=>{
 
     const teamId = props.match.params.teamname; 
+
+    //useState Hooks Defined.
+
     const {email} = props;
     const [teamName,setTeamName] = useState([]);
     const [emailToAdd,setEmailToAdd] = useState('');
@@ -19,6 +29,9 @@ const TeamChannel=(props)=>{
     const [messageList, setMessageList] = useState([]);
     const [chat,setChat] = useState(false);
     const [prevMessages,setPrevmessages] = useState([]);
+
+
+    //This  will again fetch you your username and teams you are in.
 
     useEffect(()=>{
 
@@ -49,7 +62,6 @@ const TeamChannel=(props)=>{
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     },[])
 
-    console.log(tn);
 
     useEffect(() => {
 
@@ -70,17 +82,13 @@ const TeamChannel=(props)=>{
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    console.log(teamName);
+
     let ve = tn;
 
     useEffect(()=>{
         socket = io(CONNECTION_PORT);
     },[CONNECTION_PORT]);
 
-    // useEffect(()=>{
-    //     socket.emit("join_room",ve);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // },[])
 
     useEffect(()=>{
         socket.on("recieve_message",(data)=>{
@@ -90,7 +98,6 @@ const TeamChannel=(props)=>{
 
     const sendMessage = async () => {
         var today = new Date();
-        //var time = today.getHours()+':'+today.getMinutes();
         let messageContent = {
           room: tn,
           content: {
@@ -128,12 +135,13 @@ const TeamChannel=(props)=>{
         props.history.push(`/`);
     }
 
+
+    //This will add the email to the team.
     const addMembers=async(e)=>{
         e.preventDefault();
         var TEAM = "";
         try{
             for(let i =0;i<teamName.length;i++){
-                //console.log(teamName[i]._id);
                 if(teamName[i]._id===teamId){
                     TEAM = teamName[i].teamname;
                     break;
@@ -143,7 +151,6 @@ const TeamChannel=(props)=>{
             console.log(error)
         }
         finally{
-            //console.log(TEAM);
             try{
                 const response = await axios.post('http://localhost:5000/posts/addTeam',{
                     email:emailToAdd,
@@ -158,6 +165,8 @@ const TeamChannel=(props)=>{
     }
 
     const startChat=async()=>{
+
+        //join room on the server with teamaname.
         socket.emit("join_room",tn);
         setChat(!chat);
 
@@ -222,6 +231,7 @@ const TeamChannel=(props)=>{
                             <button ><i className="material-icons">person_add</i></button>
                         )}
                 </form>
+                
                 </div>
                 <div className="chat-section">
                     {chat?(

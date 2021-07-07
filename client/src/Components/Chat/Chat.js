@@ -1,5 +1,9 @@
+//Module imports
+
 import React,{useState,useEffect} from 'react'
 import io from "socket.io-client";
+
+//Css File Imports.
 
 import "../Room/Room.css";
 
@@ -7,22 +11,28 @@ let socket;
 const CONNECTION_PORT = "localhost:8000/"
 
 const Chat=(props)=>{
+
+    //Getting This arguments from prop which is passed on by the Room.js component.
     
     const {roomID,email,toggleChat,openChat,userName} = props;
-    const [connecto,setConnecto] = useState(true);
-    console.log(roomID);
 
+    //Defining useState hooks.
+    const [connecto,setConnecto] = useState(true);
     const [message,setMessage] = useState("");
     const [messageList, setMessageList] = useState([]);
+
+    //socket login starts here.
 
     useEffect(()=>{
         socket = io(CONNECTION_PORT);
     },[CONNECTION_PORT]);
 
+
     useEffect(()=>{
         socket.emit("join_room",roomID);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
+
 
     useEffect(()=>{
         socket.on("recieve_message",(data)=>{
@@ -31,9 +41,9 @@ const Chat=(props)=>{
     },)
 
 
+    //chat Logic Starts here.
     const sendMessage = async () => {
         var today = new Date();
-        //var time = today.getHours()+':'+today.getMinutes();
         let messageContent = {
           room: roomID,
           content: {
@@ -48,16 +58,22 @@ const Chat=(props)=>{
         setMessage("");
       };
 
-      console.log(messageList);
+      //Socket Logic ends here.
 
     return (
         <>
             {connecto?(
-
                 <>
                     {toggleChat?(
                         <div className="chat-section" >
-                            <h3>Meeting Chat<button onClick={openChat}><i className="medium material-icons">close</i></button></h3>
+
+                            <h3>
+                                Meeting Chat
+                                <button onClick={openChat}>
+                                    <i className="medium material-icons">close</i>
+                                </button>
+                            </h3>
+
                             <div className="chatArea">
                                 {messageList.map((val,key)=>{
                                     return(
@@ -71,23 +87,28 @@ const Chat=(props)=>{
                             </div>
         
                             <div className="chat-controls">
-                                <input type="text" value={message} className="sendChat" onChange={(e)=>setMessage(e.target.value)} placeholder="Write a Message" />
-                                <button onClick={sendMessage}><i className="material-icons">send</i></button>
+                                <input 
+                                    type="text" 
+                                    value={message} 
+                                    className="sendChat" 
+                                    onChange={(e)=>setMessage(e.target.value)} 
+                                    placeholder="Write a Message" />
+                                <button onClick={sendMessage}>
+                                    <i className="material-icons">send</i>
+                                </button>
                             </div>
-        
-                            {/* <input
-                                type="text"
-                                placeholder="Message..."
-                                onChange={(e) => 
-                                    setMessage(e.target.value)
-                                }
-                            />
-                            <button onClick={sendMessage}>Send</button> */}
+
                         </div>
                     ):(
                         <>
                             <div className="chat-section-not" >
-                                <h3>Meeting Chat<button onClick={openChat}><i className="medium material-icons">close</i></button></h3>
+                               
+                                <h3>Meeting Chat
+                                    <button onClick={openChat}>
+                                        <i className="medium material-icons">close</i>
+                                    </button>
+                                </h3>
+
                                 <div className="chatArea">
                                     {messageList.map((val,key)=>{
                                         return(
@@ -101,9 +122,18 @@ const Chat=(props)=>{
                                 </div>
             
                                 <div className="chat-controls">
-                                    <input type="text" className="sendChat" onChange={(e)=>setMessage(e.target.value)} placeholder="Write a Message" />
-                                    <button onClick={sendMessage}><i className="material-icons">send</i></button>
+                                    
+                                    <input 
+                                        type="text" 
+                                        className="sendChat" 
+                                        onChange={(e)=>setMessage(e.target.value)} 
+                                        placeholder="Write a Message" />
+                                    <button onClick={sendMessage}>
+                                        <i className="material-icons">send</i>
+                                    </button>
+
                                 </div>
+                            
                             </div>
                         </>
                     )}

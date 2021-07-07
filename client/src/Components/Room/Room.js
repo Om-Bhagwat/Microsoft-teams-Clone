@@ -1,16 +1,18 @@
+
+//Module imports.
+
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import axios from 'axios';
-import {ReactMediaRecorder} from "react-media-recorder";
 
 
+//CSS imports
 import styled from "styled-components";
-// import socket from "socket.io-client/lib/socket";
-
 import "./Room.css";
 
 
+//Component Imports.
 import Chat from '../Chat/Chat';
 
 
@@ -27,7 +29,6 @@ const Video = (props) => {
 
     useEffect(() => {
         props.peer.on("stream", stream => {
-            // console.log();
             ref.current.srcObject = stream;
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,19 +40,13 @@ const Video = (props) => {
 }
 
 
-// const videoConstraints = {
-//     height: window.innerHeight / 2,
-//     width: window.innerWidth / 2
-// };
-
-
 const Room = (props) => {
 
+    //arguments from App.js as props.
 
     const{email} = props;
 
-    console.log(email);
-
+    //UseState hooks Defined.
 
     const [peers, setPeers] = useState([]);
     const [audiomute,setAudioMute] = useState(true);
@@ -59,20 +54,21 @@ const Room = (props) => {
     const [toggleChat,setToggleChat] = useState(true);
     const [userName,setUsername] = useState('');
 
+    //UseRef hooks Defined.
+
     const socketRef = useRef();
     const userVideo = useRef();
     const peersRef = useRef([]);
     const roomID = props.match.params.roomID;
 
 
+    //Video Calling Logic Starts.
 
     useEffect(() => {
         socketRef.current = io.connect("http://localhost:8000/");
         console.log(socketRef.current);
         navigator.mediaDevices.getUserMedia({ video: true, audio:true }).then(stream => {
-            // console.log(localstream.getAudioTracks()[0]);
             userVideo.current.srcObject = stream;
-            // console.log(stream.getAudioTracks()[0]);
             socketRef.current.emit("join room",roomID);
             socketRef.current.on("all users", (users) => {
                 const peers = [];
@@ -96,15 +92,12 @@ const Room = (props) => {
 
             console.log(peersRef);
             socketRef.current.on("user joined", payload => {
-                //console.log(payload);
                 const peer = addPeer(payload.signal, payload.callerID, stream);
                 peersRef.current.push({
                     peerID: payload.callerID,
                     peer,
                     Name:payload.Name,
                 })
-
-                // console.log(payload);
                 const peerObj = {
                     peer,
                     peerID:payload.callerID,
@@ -137,6 +130,8 @@ const Room = (props) => {
     }, []);   
 
 
+    //This useEffect will find the username using email from Database.
+
     useEffect(()=>{
         async function hanGet(){
             try{
@@ -163,13 +158,10 @@ const Room = (props) => {
             socketRef.current.emit("sending signal", { userToSignal, callerID, signal,email})
         })
 
-
-
         return peer;
 
     }
 
-    console.log(peers);
     function addPeer(incomingSignal, callerID, stream) {
         const peer = new Peer({
             initiator: false,
@@ -182,23 +174,18 @@ const Room = (props) => {
         })
 
         peer.signal(incomingSignal);
-        console.log(peersRef.current);
         return peer;
     }
 
 
 
-    const leavecall = ()=>{
-
-        
+    const leavecall = ()=>{        
         window.location = "http://localhost:3000/";
     }
 
     const muteAudio=(e)=>{
         e.preventDefault();
         setAudioMute(!audiomute);
-        // userVideo.current.srcObject.getVideoTracks()[0].contentHint("om");
-        
         userVideo.current.srcObject.getAudioTracks()[0].enabled = !(userVideo.current.srcObject.getAudioTracks()[0].enabled);
     }
 
@@ -213,19 +200,21 @@ const Room = (props) => {
 
         setToggleChat(!toggleChat);
     }
-    
 
-    console.log(peers);
+    //Video Calling Logic Ends.
+
     return (
         <div className="grid-container">
 
             <div className={`${toggleChat?"video-screen":"video-screen-not"}`}>
+                
                 <div className="videoBox">
                     <StyledVideo  ref={userVideo} autoPlay playsInline />
                     <div className="pName">
                         You
                     </div>
                 </div>
+                
                 {peers.map((peer) => {
                     console.log("joined");
                     return (
@@ -239,7 +228,9 @@ const Room = (props) => {
                 })}
 
                 <div className="btn-bar">
+                    
                     <div className="sub-btn-bar">
+                        
                         <button  className={`control-btns ${videomute?"toggle-cam-select":"toggle-cam"}`} onClick={MuteVideo}>
                             {videomute?(
                                 <i className="material-icons">videocam</i>
@@ -247,6 +238,7 @@ const Room = (props) => {
                                 <i className="material-icons">videocam_off</i>
                             )}
                         </button>
+                        
                         <button className={`control-btns ${audiomute?"toggle-cam-select":"toggle-cam"} `} onClick={muteAudio}>
                             {audiomute?(
                                 <i className="material-icons end-call">mic_none</i>
@@ -254,28 +246,23 @@ const Room = (props) => {
                                 <i className="material-icons end-call">mic_off</i>
                             )}
                         </button>
+                        
                         <button className="control-btns hangup" onClick={leavecall}>
                             <i className="material-icons">call_end</i>
                         </button>
+                        
                         <button onClick={openChat} className={`control-btns ${toggleChat?"toggle-chat":"toggle-chat-not"}`} >
                             <i className="material-icons">chat</i>
                         </button>
+                    
                     </div>
+                
                 </div>
 
             </div>
+            
             <Chat roomID={roomID} email={email} toggleChat={toggleChat}  openChat={openChat} userName={userName} />
-            {/* <ReactMediaRecorder
-                video
-                render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
-                    <div>
-                        <p>{status}</p>
-                        <button onClick={startRecording}>Start Recording</button>
-                        <button onClick={stopRecording}>Stop Recording</button>
-                        <video src={mediaBlobUrl} controls autoPlay loop />
-                    </div>
-                )}
-            />  */}
+        
         </div>
     );
 };
