@@ -1,0 +1,108 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+html {
+	height: 100%;
+}
+
+/* ---- header ---- */
+header {
+	height: 7vh;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content:space-between;
+	padding: 5px 15px;
+	background-color: rgb(94, 96, 206);
+	color: white;
+}
+
+header h4 {
+	padding: 9px 0;
+	font-family:sans-serif;
+}
+
+header h5 {
+	padding: 8px 0;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: normal;
+}
+
+header button {
+	border: none;
+	background-color: transparent;
+	color: white;
+}
+
+/* ---- main-container ---- */
+.main-container {
+	height: 93vh;
+	background-color:rgb(238, 238, 238);
+}
+
+/* ---- option-btns ---- */
+.option-btns {
+	height: 7vh;
+	padding: 10px;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	/* position: relative; */
+}
+
+.option-btns button {
+	padding: 3px 10px;
+	border-radius: 5px;
+	border: none;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	/* color: white; */
+	background-color: white;
+	box-shadow: 0 1px 4px 0px rgb(168, 168, 168);
+}
+
+.option-btns button span {
+	margin: 0 7px;
+}
+
+/* ---- team-list ---- */
+.team-list {
+	height: 86vh;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	/* align-items: flex-start; */
+	align-content: flex-start;
+}
+
+.team {
+	height: 200px;
+	width: 250px;
+	background-color:white;
+	margin: 5px;
+	border-radius: 5px;
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 0 1px 3px 1px rgb(161, 161, 161);
+
+}
+
+.team-icon {
+	height: 75px;
+	width: 75px;
+	background-color: aliceblue;
+	margin: 10px;
+	background: url("https://image.flaticon.com/icons/png/512/25/25437.png") no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+.teamName {
+	font-size: medium;
+	font-family: sans-serif;
+}

@@ -1,0 +1,257 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	height: 100%;
+}
+
+.main-container1 {
+	display: flex;
+	flex-flow: row nowrap;
+	position: relative;
+}
+
+
+/* -------- Team List Section --------- */
+.team-list1 {
+	background-color: rgb(238, 238, 238);
+	height: 100vh;
+	width: 25vw;
+	display: flex;
+	flex-flow: column nowrap;
+	align-content: space-between;
+}
+
+.back1 button{
+	height: 4vh;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	margin: 15px;
+	border: none;
+}
+
+.back1 div {
+	margin: 0 5px;
+}
+
+.team-name1 {
+	height: 20vh;
+	padding: 0 5px;
+}
+
+.team-icon1 {
+	height: 75px;
+	width: 75px;
+	background-color: #383938;
+	border-radius: 5px;
+	margin: 15px;
+	background: url("https://image.flaticon.com/icons/png/512/25/25437.png") no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+.team-name1 .name1 {
+	margin: 15px;
+	font-size: large;
+	font-family: "Roboto";
+}
+
+hr {margin: 15px;}
+
+.channel-list1 {
+	height: 51vh;
+	display: flex;
+	flex-flow: column nowrap;
+	padding: 10px 5px;
+}
+
+.channel1 {
+	background-color: #646bcc;
+	color: white;
+	padding: 4px 10px;
+	margin: 3px 15px 3px 10px;
+	border-radius: 4px;
+}
+
+.call-team1 {
+	height: 5vh;
+	background-color: #646bcc;
+	margin: 15px;
+	border-radius: 4px;
+	position: relative;
+}
+
+.call-team1 button {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-color: transparent;
+	border: none;
+	color: white;
+}
+
+
+.add-member1 {
+	height: 6vh;
+	display: flex;
+	padding: 5px;
+	position: relative;
+}
+
+.add-member1 input {
+	position: absolute;
+	left: 15px;
+	width: 60%;
+	height: 80%;
+	border: none;
+	border-bottom: #646bcc 1px solid;
+	border-radius: 4px;
+}
+
+.add-member1 input::placeholder {
+	padding: 0 5px;
+}
+
+.add-member1 button {
+	position: absolute;
+	right: 15px;
+	width: 25%;
+	height: 80%;
+	color: white;
+	background-color: #646bcc;
+	border: none;
+	padding: 3px 8px;
+	border-radius: 4px;
+}
+
+/* -------- Chat --------- */
+.chat-section {
+	background-color: #f3f2f1;
+	box-shadow: -1px 0 5px 0px grey;
+	height: 100vh;
+	width: 75vw;
+}
+
+.chat-section h3 {
+	font-size: 1.3rem;
+	height: 5vh;
+	text-align: center;
+	margin: 5px 0 0 0;
+	font-family: 'Roboto', sans-serif;
+	position: relative;
+}
+
+.chat-section h3 button {
+	border: none;
+	position: absolute;
+	right: 5px;
+	top: 3px;
+	background-color: transparent;
+}
+
+.chatArea {
+	background-color: white;
+	margin: 5px;
+	padding: 2px;
+	border-radius: 8px;
+	height: 88vh;
+	font-family: 'Roboto', sans-serif;
+	overflow-y: scroll;
+}
+
+.chatheads {
+	padding: 5px;
+	margin: 5px;
+	margin-right: 5rem;
+	border-radius: 5px;
+	background-color: #e5e5f1;
+}
+
+.chatheads2 {
+	padding: 5px;
+	margin: 5px;
+	margin-left: 5rem;
+	border-radius: 5px;
+	background-color: #e5e5f1;
+}
+
+.chatheads p:nth-child(3) {
+	text-align: right;
+	font-size: 0.8rem;
+	color:slategray;
+}
+
+.chatheads2 p:nth-child(3) {
+	text-align: right;
+	font-size: 0.8rem;
+	color:slategray;
+}
+
+.chat-controls {
+	color: #939aff;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-content:center;
+	align-items: center;
+	height: 5vh;
+	padding: 3px;
+	position: relative;
+}
+
+.chat-controls input::placeholder {
+	padding-left: 5px;
+}
+.chat-controls input {
+	position: absolute;
+	left: 5px;
+	bottom: 4px;
+	margin: 2px 3px;
+	height: 4vh;
+	width: 90%;
+	padding-left: 5px;
+	border: none;
+	border-bottom: #646bcc solid 2px;
+	border-radius: 5px;
+}
+
+.chat-controls button {
+	border: none;
+	position: absolute;
+	right: 5px;
+	bottom: 4px;
+	color: #646bcc;
+}
+
+
+@media screen and (max-width:900px) {
+	.chat-section {
+		width: 70vw;
+	}
+	.team-list {
+		width: 30vw;
+	}
+}
+@media screen and (max-width:768px) {
+	.chat-section {
+		width: 65vw;
+	}
+	.team-list {
+		width: 35vw;
+	}
+}
+
+@media screen and (max-width:610px) {
+	.chat-section {
+		width: 100vw;
+		/* z-index: 1; */
+	}
+	.team-list {
+		display: none;
+		/* width: 30vw; */
+	}
+}

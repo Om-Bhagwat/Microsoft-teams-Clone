@@ -7,8 +7,8 @@ let socket;
 const CONNECTION_PORT = "localhost:8000/"
 
 const Chat=(props)=>{
-
-    const {roomID,email,toggleChat,setToggleChat,openChat,userName} = props;
+    
+    const {roomID,email,toggleChat,openChat,userName} = props;
     const [connecto,setConnecto] = useState(true);
     console.log(roomID);
 

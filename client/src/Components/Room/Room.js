@@ -150,6 +150,7 @@ const Room = (props) => {
             }
         }
         hanGet();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     function createPeer(userToSignal, callerID ,stream) {
@@ -263,7 +264,7 @@ const Room = (props) => {
                 </div>
 
             </div>
-            <Chat roomID={roomID} email={email} toggleChat={toggleChat} setToggleChat={setToggleChat} openChat={openChat} userName={userName} />
+            <Chat roomID={roomID} email={email} toggleChat={toggleChat}  openChat={openChat} userName={userName} />
             {/* <ReactMediaRecorder
                 video
                 render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (

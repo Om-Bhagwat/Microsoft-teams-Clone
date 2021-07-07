@@ -14,7 +14,6 @@ import fire from './Firebase/fire';
 import Login from './Components/Login/Login';
 import Homepage from './Components/Homepage/Homepage';
 import Room from './Components/Room/Room';
-import CreateTeam from './Components/CreateTeam/CreateTeam';
 import TeamChannel from './Components/TeamChannel/TeamChannel';
 
 
@@ -144,10 +143,6 @@ function App() {
               <Route path = '/room/:roomID' exact render = {(props)=>(
                   <Room {...props} email={user.email} />
                 )}
-              />
-              <Route path = '/createteam' exact render={(props)=>(
-                  <CreateTeam {...props} email={user.email} />
-              )}
               />
               <Route path = '/team/:teamname' exact render={(props)=>(
                   <TeamChannel {...props} email={user.email} />

@@ -1,22 +1,17 @@
 //require('dotenv').config();
-import mongoose from 'mongoose';
-import postRoutes from './routes/posts.js';
-import bodyParser from 'body-parser';
-import express from 'express';
-import http from 'http';
+const express = require('express');
+const http = require('http');
 const app = express();
 const server = http.createServer(app);
-import socket from 'socket.io';
-import cors from 'cors';
+const socket = require('socket.io');
+const cors = require('cors');
 const io = socket(server);
 
 
 
-app.use(bodyParser.json({limit:"30mb",extended:true}))
-app.use(bodyParser.urlencoded({limit:"30mb",extended:true}))
 app.use(cors());
 
-app.use('/posts',postRoutes);
+
 
 const users = {};
 
@@ -39,12 +34,15 @@ io.on('connection', socket => {
         socketToRoom[socket.id] = roomID;
         //console.log("usersinroom    "+users[roomID]);
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
-        //socket.emit("all users", usersInThisRoom);
+        socket.emit("all users", usersInThisRoom);
     });
     
 
     socket.on("join_room",(data)=>{
         socket.join(data);
+        console.log("joining");
+        console.log(data);
+        console.log("ended");
     })
 
     socket.on("send_message",(data)=>{
@@ -77,16 +75,7 @@ io.on('connection', socket => {
 
 });
 
-//server.listen(process.env.PORT || 8000, () => console.log('server is running on port 8000'));
+server.listen(process.env.PORT || 8000, () => console.log('server is running on port 8000'));
 
-const CONNECTION_URL = 'mongodb+srv://Om:WbiidEkQuX7zPc6a@teams.hchbg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-const PORT =process.env.PORT || 8000;
-// extra parameters so that we don't get warnings
-mongoose.connect(CONNECTION_URL,{useNewUrlParser:true,useUnifiedTopology:true})
-    .then(() => server.listen(PORT,() => console.log(`Server running on port : ${PORT} and Database is connected`)))
-    .catch((error) => console.log(error.message));
-
-    //So we dont get warnings in console
-mongoose.set('useFindAndModify',false);
 
 
