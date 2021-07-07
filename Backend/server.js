@@ -1,4 +1,6 @@
-//require('dotenv').config();
+
+
+//importing Modules.
 const express = require('express');
 const http = require('http');
 const app = express();
@@ -17,7 +19,7 @@ const users = {};
 
 const socketToRoom = {};
 
-
+//Logic for Video Calling starts here.
 io.on('connection', socket => {
 
     socket.on("join room", (roomID) => {
@@ -40,13 +42,9 @@ io.on('connection', socket => {
 
     socket.on("join_room",(data)=>{
         socket.join(data);
-        console.log("joining");
-        console.log(data);
-        console.log("ended");
     })
 
     socket.on("send_message",(data)=>{
-        //console.log(data);
         socket.to(data.room).emit("recieve_message",data.content);
     })
 
@@ -61,14 +59,11 @@ io.on('connection', socket => {
     socket.on('disconnect', () => {
         const roomID = socketToRoom[socket.id];
         let room = users[roomID];
-        // console.log(users);
-        //console.log("  "+users[roomID]);
         if (room) {
             room = room.filter(id => id !== socket.id);
             users[roomID] = room;
         }
         
-        //console.log("room"+users[roomID]);
         socket.broadcast.emit('user left',socket.id);
 
     });
