@@ -123,7 +123,6 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  console.log(email);
   //UserAuthentication Logic Ends here.
 
   //Entire Project Routing is done from here using react-router-dom.
