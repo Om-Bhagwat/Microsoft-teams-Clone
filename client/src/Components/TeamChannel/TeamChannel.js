@@ -11,7 +11,7 @@ import io from "socket.io-client";
 import './TeamChannel.css';
 
 let socket;
-const CONNECTION_PORT = "localhost:8000/"
+const CONNECTION_PORT = "https://video-chat-om.herokuapp.com/"
 
 
 const TeamChannel=(props)=>{

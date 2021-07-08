@@ -65,7 +65,7 @@ const Room = (props) => {
     //Video Calling Logic Starts.
 
     useEffect(() => {
-        socketRef.current = io.connect("http://localhost:8000/");
+        socketRef.current = io.connect("https://video-chat-om.herokuapp.com/");
         console.log(socketRef.current);
         navigator.mediaDevices.getUserMedia({ video: true, audio:true }).then(stream => {
             userVideo.current.srcObject = stream;

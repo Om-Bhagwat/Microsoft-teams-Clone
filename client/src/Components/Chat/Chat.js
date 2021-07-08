@@ -8,7 +8,7 @@ import io from "socket.io-client";
 import "../Room/Room.css";
 
 let socket;
-const CONNECTION_PORT = "localhost:8000/"
+const CONNECTION_PORT = "https://video-chat-om.herokuapp.com/"
 
 const Chat=(props)=>{
 
