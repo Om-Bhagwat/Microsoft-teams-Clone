@@ -13,4 +13,3 @@ router.post('/addteam',addTeam);
 router.post('/findteams',findTeams);
 
  export default router;
-
