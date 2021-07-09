@@ -233,15 +233,15 @@ const TeamChannel=(props)=>{
                 </form>
                 
                 </div>
-                <div className="chat-section">
+                <div className="chat-section1">
                     {chat?(
                         <>
                         <h3>Meeting Chat</h3>
-                        <div className="chatArea">
+                        <div className="chatArea1">
                             {prevMessages.map((val,key)=>{
                                 if(val.teamname===tn){
                                     return(
-                                        <div className={`${(val.username===userName)?"chatheads2":"chatheads"}`}>
+                                        <div className={`${(val.username===userName)?"chatheads21":"chatheads1"}`}>
                                             <h4>{val.username}</h4>
                                             <p>{val.message}</p>
                                             {/* <p>{val.time}</p> */}
@@ -251,7 +251,7 @@ const TeamChannel=(props)=>{
                             })}
                             {messageList.map((val,key)=>{
                                 return(
-                                    <div className={`${(val.author===userName)?"chatheads2":"chatheads"}`} id={val.author === email?"YOU":"Other"}>
+                                    <div className={`${(val.author===userName)?"chatheads21":"chatheads1"}`} id={val.author === email?"YOU":"Other"}>
                                         <h4>{val.author}</h4>
                                         <p>{val.message}</p>
                                         <p>{val.time}</p>
@@ -259,7 +259,7 @@ const TeamChannel=(props)=>{
                                 )
                             })}
                         </div>
-                        <div className="chat-controls">
+                        <div className="chat-controls1">
                             <input value={message} type="text" className="sendChat" onChange={(e)=>setMessage(e.target.value)} placeholder="Write Messege To Team"/>
                             <button onClick={sendMessage}><i className="material-icons">send</i></button>
                         </div>

@@ -43,7 +43,7 @@ const Homepage = (props) =>{
                 const response = await axios.post('http://localhost:5000/posts/findteams',{
                     email
                 },);
-    
+               
                 allcoms = response.data.data1[0].teams;
                 setTeamn(response.data.data1[0].username);
                 setAllteams(allcoms);
