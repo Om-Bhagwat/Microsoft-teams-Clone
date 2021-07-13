@@ -37,7 +37,7 @@ const TeamChannel=(props)=>{
 
         async function getE(){
             try{
-                const response = await axios.post('http://localhost:5000/posts/findteams',{
+                const response = await axios.post('https://video-chat-mongo-om.herokuapp.com/posts/findteams',{
                     email
                 },);
 
@@ -67,7 +67,7 @@ const TeamChannel=(props)=>{
 
         async function getT(){
             try{
-                const response = await axios.post('http://localhost:5000/posts/findteams',{
+                const response = await axios.post('https://video-chat-mongo-om.herokuapp.com/posts/findteams',{
                     email
                 },);
             
@@ -108,7 +108,7 @@ const TeamChannel=(props)=>{
         };
     
         try{
-            const response = await axios.post('http://localhost:5000/posts/create',{
+            const response = await axios.post('https://video-chat-mongo-om.herokuapp.com/posts/create',{
 
                 username:userName,
                 teamname:tn,
@@ -128,7 +128,7 @@ const TeamChannel=(props)=>{
 
     function create(){
         const id = uuid();
-        props.history.push(`/room/${id}`);
+        props.history.push(`/${id}`);
     }
 
     function goBack(){
@@ -152,7 +152,7 @@ const TeamChannel=(props)=>{
         }
         finally{
             try{
-                const response = await axios.post('http://localhost:5000/posts/addTeam',{
+                const response = await axios.post('https://video-chat-mongo-om.herokuapp.com/posts/addTeam',{
                     email:emailToAdd,
                     teamname:TEAM
                 },);
@@ -172,7 +172,7 @@ const TeamChannel=(props)=>{
 
         //loading previous messages.
         try{
-            const response = await axios.post('http://localhost:5000/posts/find',{
+            const response = await axios.post('https://video-chat-mongo-om.herokuapp.com/posts/find',{
                 teamname:tn,
             },);
 

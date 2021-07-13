@@ -31,7 +31,7 @@ const Homepage = (props) =>{
 
     function create() {
         const id = uuid();
-        props.history.push(`/room/${id}`);
+        props.history.push(`/${id}`);
     }
 
     //At each load this useEffect hook will fetch you the list of teams you are in.
@@ -40,7 +40,7 @@ const Homepage = (props) =>{
         async function seeYourTeams(){
             let allcoms;
             try{
-                const response = await axios.post('http://localhost:5000/posts/findteams',{
+                const response = await axios.post('https://video-chat-mongo-om.herokuapp.com/posts/findteams',{
                     email
                 },);
                
@@ -64,7 +64,7 @@ const Homepage = (props) =>{
         e.preventDefault();
         setFlag(!flag);
         try{
-            const response = await axios.post('http://localhost:5000/posts/addteam',{
+            const response = await axios.post('https://video-chat-mongo-om.herokuapp.com/posts/addteam',{
                 email,
                 teamname:newTeam,
             },);

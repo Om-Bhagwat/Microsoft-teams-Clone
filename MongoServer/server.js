@@ -22,7 +22,7 @@ app.use('/posts',postRoutes);
 
 
 const CONNECTION_URL = 'mongodb+srv://Om:WbiidEkQuX7zPc6a@teams.hchbg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-const PORT =process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 // extra parameters so that we don't get warnings
 mongoose.connect(CONNECTION_URL,{useNewUrlParser:true,useUnifiedTopology:true})
     .then(() => app.listen(PORT,() => console.log(`Server running on port : ${PORT} and Database is connected`)))

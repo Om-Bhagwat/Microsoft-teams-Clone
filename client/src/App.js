@@ -75,7 +75,7 @@ function App() {
     //Saving name against Email in the MongoDb.
 
     try{
-      const response = await axios.post('http://localhost:5000/posts/adduser',{
+      const response = await axios.post('https://video-chat-mongo-om.herokuapp.com/posts/adduser',{
           username:name,
           email
       },);
@@ -137,7 +137,7 @@ function App() {
                   <Homepage {...props}  email={user.email}  handleLogout = {handleLogout}/>
                 )}
               />
-              <Route path = '/room/:roomID' exact render = {(props)=>(
+              <Route path = '/:roomID' exact render = {(props)=>(
                   <Room {...props} email={user.email} />
                 )}
               />

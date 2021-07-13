@@ -135,7 +135,7 @@ const Room = (props) => {
     useEffect(()=>{
         async function hanGet(){
             try{
-                const response = await axios.post('http://localhost:5000/posts/findteams',{
+                const response = await axios.post('https://video-chat-mongo-om.herokuapp.com/posts/findteams',{
                     email
                 },);
                 console.log(response.data.data1[0].username);
@@ -180,7 +180,7 @@ const Room = (props) => {
 
 
     const leavecall = ()=>{        
-        window.location = "http://localhost:3000/";
+        window.location = "/";
     }
 
     const muteAudio=(e)=>{
