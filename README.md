@@ -30,16 +30,16 @@ This will Get your Localhost up and Running.
 
 ## Module Decomposition
 
-**User Authentication**<br>
+> **User Authentication**<br>
 The user authentication module is made using firebase authentication therefore it covers all the Contraints on email and password such as Not found, already exists, password too small or weak. It also provids jwt type functionality of User able to directly login after a period of time if he has logged on before untill the session expires.
 
-**Video Call**<br>
+> **Video Call**<br>
 This module focuses on starting a event in which multiple users can talk with each other through Peer connections. A mesh Topology is created among the users so that each one is connected to the n-1 users present in the video call. Data flow is from client to Backend or Websockets using the Socket.io at backend and socket.io-client at client side. And Peerjs for establishing and Creating dedicated connections.
 
-**Chat Module**<br>
+> **Chat Module**<br>
 This module is made with Socket.io through which i am playing around with the data from client to websockets. This means that when a user sends message the message is listened by my websocket server and in response is emitted to all users present in the room. Note this room is nothing but the Team ID, or while during video call it will be RoomID.
 
-**Database Module**<br>
+> **Database Module**<br>
 This module let's you create new teams add people onto your teams and chat in the team channel also view the chat history. The same chat module is used here also only difference is the message is now not only going through socket's but also to the Database. All the Routes are designed using express.js and the database used is MongoDB which is scalable.
 
 
