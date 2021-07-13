@@ -65,17 +65,4 @@ Any type of suggestions are also Welcomed 😁
 
 ___
 ### Project Screenshots
-![Sign In](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/499/513/datas/gallery.jpg	)
-
-![Sign Up](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/499/504/datas/gallery.jpg)
-
-![Get Details](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/499/511/datas/gallery.jpg)
-
-![Post Details](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/499/510/datas/gallery.jpg)
-
-![Update Details](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/499/515/datas/gallery.jpg)
-
----
-
-
-[^1]: This is the footnote.
+ You can get All the Project Screen Shots in this [google Document](https://docs.google.com/document/d/1cEtK6ft1GrgTipFoTbY5Cl7NAEY-BVN1OIu7cKfx694/edit?usp=sharing) which not only has images but also how the application interface looks while responsive.
